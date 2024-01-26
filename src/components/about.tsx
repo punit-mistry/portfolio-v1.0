@@ -49,6 +49,9 @@ const about = () => {
       </div>
       <div className="mt-5 md:mt-10 flex lg:items-center lg:justify-center flex-col ">
         <div className="text-xl bg-white w-fit text-black  lg:px-4 font-bold shadow-white hover:shadow-md rounded-xl">
+
+
+            
           FULL STACK DEVELOPMENT
         </div>
         <div className="flex  flex-wrap lg:w-1/3  lg:items-center lg:justify-center  mt-5 gap-2">
