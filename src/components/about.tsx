@@ -1,10 +1,12 @@
 import React from "react";
 const technologies = [
   "React",
+  "Next JS",
   "Vue",
   "Javascript",
   "Node.js",
   "Express.js",
+  "Supbase",
   "MongoDB",
   "HTML",
   "CSS",
