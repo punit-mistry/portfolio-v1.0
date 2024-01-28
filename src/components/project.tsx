@@ -114,9 +114,9 @@ const ProjectList: React.FC = () => {
   return (
     <div className="mb-4 px-4 lg:py-[5rem] lg:px-[20rem]">
       <div className="text-3xl font-bold font-mono ">
-        {"<"}Projects{"/>"}
+        {"<"}My Work{"/>"}
       </div>
-      <div className="flex flex-wrap gap-4 items-center justify-center mt-4 ">
+      <div className="flex flex-wrap gap-4 items-center justify-center mt-10 ">
         {projects.map((project, index) => (
           <ProjectCard key={index} title={project.title} techStack={project.techStack} description={project.description} img={project.img} github={project.github} />
         ))}

@@ -17,7 +17,7 @@ const ProjectCard: FC<Props> = ({
   github,
 }) => {
   return (
-    <div className="mt-5 border-2 w-[350px] hover:cursor-pointer transition-all hover:-translate-y-10 border-black dark:border-white rounded-lg p-4">
+    <div className="mt-5 border-2 w-[350px] hover:cursor-pointer transition-all hover:-translate-y-2 border-black dark:border-white rounded-lg p-4">
       <div className="relative ">
         <div className="shadow-lg shadow-gray-700  absolute -top-9 w-full h-52 rounded-md">
           <img
