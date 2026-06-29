@@ -1,14 +1,26 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ConstellationField from "@/components/ConstellationField";
-import { Github, Linkedin, Instagram, MessageCircle, Send } from "lucide-react";
+import { Github, Linkedin, Instagram, MessageCircle, Send, Loader2 } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [sending, setSending] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.message) return;
+    setSending(true);
+    const whatsappMsg = `*New Contact Form Submission*%0A%0A*Name:* ${encodeURIComponent(form.name)}%0A*Email:* ${encodeURIComponent(form.email)}%0A*Message:* ${encodeURIComponent(form.message)}`;
+    window.open(`https://wa.me/918286075880?text=${whatsappMsg}`, "_blank", "noopener");
+    setSending(false);
+    setForm({ name: "", email: "", message: "" });
+  };
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -136,20 +148,17 @@ export default function Contact() {
           style={{ opacity: 0 }}
         >
           <form
-            name="contact"
-            method="POST"
-            data-netlify="true"
-            action="/"
+            onSubmit={handleSubmit}
             className="card-glass p-8 max-w-lg mx-auto text-left"
           >
-            <input type="hidden" name="form-name" value="contact" />
             <div className="mb-4">
               <label className="font-mono text-xs mb-2 block" style={{ color: 'hsl(var(--muted-foreground))' }}>
                 Name
               </label>
               <input
                 type="text"
-                name="name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 required
                 className="w-full px-4 py-3 rounded-xl font-mono text-sm"
                 style={{
@@ -167,7 +176,8 @@ export default function Contact() {
               </label>
               <input
                 type="email"
-                name="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
                 required
                 className="w-full px-4 py-3 rounded-xl font-mono text-sm"
                 style={{
@@ -184,7 +194,8 @@ export default function Contact() {
                 Message
               </label>
               <textarea
-                name="message"
+                value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
                 required
                 rows={4}
                 className="w-full px-4 py-3 rounded-xl font-mono text-sm resize-none"
@@ -199,9 +210,10 @@ export default function Contact() {
             </div>
             <button
               type="submit"
-              className="w-full font-cta px-6 py-3 rounded-xl transition-all duration-300 inline-flex items-center justify-center gap-2 btn-primary"
+              disabled={sending}
+              className="w-full font-cta px-6 py-3 rounded-xl transition-all duration-300 inline-flex items-center justify-center gap-2 btn-primary disabled:opacity-60"
             >
-              <Send size={16} />
+              {sending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
               Send Message
             </button>
           </form>

@@ -28,3 +28,8 @@
   for = "/robots.txt"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+[[redirects]]
+  from = "/articles/*"
+  to = "/"
+  status = 200

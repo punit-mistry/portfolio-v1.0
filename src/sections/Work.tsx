@@ -14,6 +14,8 @@ const PROJECTS = [
     imageWebp: '/project-dashboard.webp',
     alt: 'Admin dashboard UI showing analytics charts, user management table, and real-time data visualization widgets',
     direction: -60,
+    liveUrl: '#',
+    githubUrl: '#',
   },
   {
     name: 'WhatsApp Business Bot',
@@ -23,6 +25,8 @@ const PROJECTS = [
     imageWebp: '/project-bot.webp',
     alt: 'WhatsApp business bot interface showing automated customer chat, order management, and API integration dashboard',
     direction: 60,
+    liveUrl: '#',
+    githubUrl: '#',
   },
   {
     name: 'Express Builder',
@@ -32,6 +36,30 @@ const PROJECTS = [
     imageWebp: '/project-cli.webp',
     alt: 'Express.js project builder CLI tool showing scaffolding options, middleware configuration, and API endpoint generator interface',
     direction: -60,
+    liveUrl: '#',
+    githubUrl: '#',
+  },
+  {
+    name: 'Healthy E-Living',
+    description: 'Work with a clinical dietitian to create a personalized nutrition plan tailored to your lifestyle, medical history, and long-term health goals.',
+    tech: 'Next.js · TypeScript · Tailwind CSS',
+    image: '',
+    imageWebp: '',
+    alt: 'Healthy E-Living nutrition platform homepage with dietitian consultation booking and personalized meal planning',
+    direction: 60,
+    liveUrl: 'https://healthy-e-living.vercel.app/',
+    githubUrl: 'https://github.com/punit-mistry/healthy-e-living',
+  },
+  {
+    name: 'Orange Clinic',
+    description: 'A modern clinic management platform for healthcare providers to manage appointments, patient records, and medical documentation efficiently.',
+    tech: 'React · TypeScript · Tailwind CSS',
+    image: '',
+    imageWebp: '',
+    alt: 'Orange Clinic management dashboard with appointment scheduling, patient records, and medical documentation',
+    direction: -60,
+    liveUrl: 'https://orange-clinic.vercel.app/',
+    githubUrl: 'https://github.com/punit-mistry/orange-clinic/tree/master',
   },
 ];
 
@@ -151,33 +179,53 @@ export default function Work() {
                     {project.tech}
                   </p>
                   <div className="flex items-center gap-6">
-                    <button
-                      className="font-cta flex items-center gap-2 transition-colors duration-300 btn-accent"
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-cta inline-flex items-center gap-2 transition-colors duration-300 btn-accent"
                     >
                       <ExternalLink size={16} />
                       Live Demo
-                    </button>
-                    <button
-                      className="font-cta flex items-center gap-2 transition-colors duration-300 btn-accent"
+                    </a>
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-cta inline-flex items-center gap-2 transition-colors duration-300 btn-accent"
                     >
                       <Github size={16} />
                       GitHub
-                    </button>
+                    </a>
                   </div>
                 </div>
 
                 <div className={`flex items-center ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
-                  <picture>
-                    <source srcSet={project.imageWebp} type="image/webp" />
-                    <source srcSet={project.image} type="image/jpeg" />
-                    <img
-                      src={project.image}
-                      alt={project.alt}
-                      className="w-full h-auto rounded-2xl object-cover"
-                      style={{ aspectRatio: '16/9' }}
-                      loading="lazy"
-                    />
-                  </picture>
+                  {project.image ? (
+                    <picture>
+                      <source srcSet={project.imageWebp} type="image/webp" />
+                      <source srcSet={project.image} type="image/jpeg" />
+                      <img
+                        src={project.image}
+                        alt={project.alt}
+                        className="w-full h-auto rounded-2xl object-cover"
+                        style={{ aspectRatio: '16/9' }}
+                        loading="lazy"
+                      />
+                    </picture>
+                  ) : (
+                    <div
+                      className="w-full rounded-2xl flex items-center justify-center"
+                      style={{
+                        aspectRatio: '16/9',
+                        background: 'linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--accent-2) / 0.2))',
+                      }}
+                    >
+                      <span className="font-heading text-3xl opacity-40" style={{ color: 'hsl(var(--foreground))' }}>
+                        {project.name.split(' ').map(w => w[0]).join('')}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
