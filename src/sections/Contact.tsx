@@ -119,7 +119,7 @@ export default function Contact() {
               I'm available for freelance projects and collaborations. Whether you need a landing page, a full-stack web app, or a custom SaaS platform — let's discuss your idea over WhatsApp.
             </p>
             <a
-              href="https://wa.me/918286075880"
+              href="https://wa.me/918286075880?text=Hey%20Punit%2C%20I%20just%20saw%20your%20portfolio%20and%20really%20liked%20your%20work!%20I'd%20love%20to%20discuss%20a%20project%20with%20you."
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-6 py-3 rounded-xl font-cta transition-all duration-300 btn-whatsapp"
