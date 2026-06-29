@@ -1,12 +1,14 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import ParticleCanvas from '@/components/ParticleCanvas';
+import { useLowEndDevice } from '@/hooks/use-low-end-device';
 
 interface HeroProps {
   onNavigate: (target: string) => void;
 }
 
 export default function Hero({ onNavigate }: HeroProps) {
+  const { isLowEnd, prefersReducedMotion } = useLowEndDevice();
   const sectionRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
   const nameRef = useRef<HTMLHeadingElement>(null);
@@ -16,7 +18,8 @@ export default function Hero({ onNavigate }: HeroProps) {
   const svgPathRef = useRef<SVGPathElement>(null);
 
   useEffect(() => {
-    const tl = gsap.timeline({ delay: 0.5 });
+    const delay = isLowEnd || prefersReducedMotion ? 0.1 : 0.5;
+    const tl = gsap.timeline({ delay });
 
     tl.to(labelRef.current, {
       opacity: 1,
@@ -50,7 +53,7 @@ export default function Hero({ onNavigate }: HeroProps) {
       ease: 'power3.out',
     }, '-=0.4');
 
-    if (svgPathRef.current) {
+    if (svgPathRef.current && !(isLowEnd || prefersReducedMotion)) {
       const length = svgPathRef.current.getTotalLength();
       gsap.set(svgPathRef.current, {
         strokeDasharray: length,

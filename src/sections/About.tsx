@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, lazy, Suspense } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import WireframeCube from '@/components/WireframeCube';
+
+const WireframeCube = lazy(() => import('@/components/WireframeCube'));
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -143,7 +144,9 @@ export default function About() {
 
           <div className="lg:col-span-2 flex justify-center">
             <div ref={cubeRef} style={{ opacity: 0 }}>
-              <WireframeCube />
+              <Suspense fallback={<div style={{ width: 300, height: 300 }} />}>
+                <WireframeCube />
+              </Suspense>
             </div>
           </div>
         </div>
