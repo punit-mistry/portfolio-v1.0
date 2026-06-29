@@ -10,6 +10,8 @@ import About from '@/sections/About';
 import Skills from '@/sections/Skills';
 import Work from '@/sections/Work';
 import Blog from '@/sections/Blog';
+import Testimonials from '@/sections/Testimonials';
+import FAQ from '@/sections/FAQ';
 import Contact from '@/sections/Contact';
 import Footer from '@/sections/Footer';
 import SVGScrollPath from '@/components/SVGScrollPath';
@@ -80,7 +82,9 @@ export default function App() {
         <About />
         <Skills />
         <Work />
+        <Testimonials />
         <Blog />
+        <FAQ />
         <Contact />
         <Footer onNavigate={handleNavigate} />
       </main>

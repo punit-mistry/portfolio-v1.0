@@ -1,11 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ExternalLink, Github } from 'lucide-react';
+import { ExternalLink, Github, ArrowRight } from 'lucide-react';
+import ProjectDetail from './ProjectDetail';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PROJECTS = [
+export const PROJECTS = [
   {
     name: 'Admin Dashboard',
     description: 'A comprehensive analytics dashboard featuring real-time data visualization, user management, and role-based access control.',
@@ -64,10 +65,41 @@ const PROJECTS = [
 ];
 
 export default function Work() {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    if (selectedIndex !== null) {
+      const slug = PROJECTS[selectedIndex].name.toLowerCase().replace(/\s+/g, '-');
+      window.history.pushState({ project: slug }, '', `/projects/${slug}`);
+    } else if (selectedIndex === null && window.location.pathname.startsWith('/projects/')) {
+      window.history.pushState({}, '', '/');
+    }
+  }, [selectedIndex]);
+
+  useEffect(() => {
+    const handlePop = () => {
+      if (window.location.pathname.startsWith('/projects/')) {
+        const slug = window.location.pathname.replace('/projects/', '');
+        const idx = PROJECTS.findIndex((p) => p.name.toLowerCase().replace(/\s+/g, '-') === slug);
+        if (idx !== -1) setSelectedIndex(idx);
+      } else {
+        setSelectedIndex(null);
+      }
+    };
+    window.addEventListener('popstate', handlePop);
+
+    const initialSlug = window.location.pathname.replace('/projects/', '');
+    if (initialSlug && initialSlug !== window.location.pathname) {
+      const idx = PROJECTS.findIndex((p) => p.name.toLowerCase().replace(/\s+/g, '-') === initialSlug);
+      if (idx !== -1) setSelectedIndex(idx);
+    }
+
+    return () => window.removeEventListener('popstate', handlePop);
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -126,6 +158,8 @@ export default function Work() {
 
   const headingWords = 'Featured Work'.split(' ');
 
+  const selectedProject = selectedIndex !== null ? PROJECTS[selectedIndex] : null;
+
   return (
     <section
       ref={sectionRef}
@@ -134,103 +168,115 @@ export default function Work() {
       style={{ padding: '140px 24px' }}
     >
       <div className="max-w-[1200px] mx-auto">
-        <span
-          ref={labelRef}
-          className="font-label block mb-6"
-          style={{ opacity: 0, color: 'hsl(var(--primary))' }}
-        >
-          Portfolio
-        </span>
-
-        <h2
-          ref={headingRef}
-          className="font-heading mb-16"
-          style={{ fontSize: 'clamp(32px, 5vw, 56px)', letterSpacing: '-2px', color: 'hsl(var(--foreground))' }}
-        >
-          {headingWords.map((word, i) => (
-            <span key={i} className="word inline-block mr-[0.3em]">
-              {word}
-            </span>
-          ))}
-        </h2>
-
-        <div className="flex flex-col gap-8">
-          {PROJECTS.map((project, i) => (
-            <div
-              key={i}
-              ref={el => { cardsRef.current[i] = el; }}
-              className="card-project card-glass overflow-hidden will-change-transform"
+        {selectedProject ? (
+          <ProjectDetail index={selectedIndex!} onBack={() => setSelectedIndex(null)} />
+        ) : (
+          <>
+            <span
+              ref={labelRef}
+              className="font-label block mb-6"
+              style={{ opacity: 0, color: 'hsl(var(--primary))' }}
             >
-              <div className={`card-inner grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 lg:p-10 ${i % 2 === 1 ? 'lg:direction-rtl' : ''}`}>
-                <div className={`flex flex-col justify-center ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
-                  <h3
-                    className="font-heading mb-4"
-                    style={{ fontSize: 'clamp(24px, 3vw, 32px)', letterSpacing: '-1px', color: 'hsl(var(--foreground))' }}
-                  >
-                    {project.name}
-                  </h3>
-                  <p
-                    className="text-base mb-4"
-                    style={{ color: 'hsl(var(--muted-foreground))', lineHeight: 1.65 }}
-                  >
-                    {project.description}
-                  </p>
-                  <p className="font-mono text-sm mb-6" style={{ color: 'hsl(var(--muted-foreground) / 0.6)' }}>
-                    {project.tech}
-                  </p>
-                  <div className="flex items-center gap-6">
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-cta inline-flex items-center gap-2 transition-colors duration-300 btn-accent"
-                    >
-                      <ExternalLink size={16} />
-                      Live Demo
-                    </a>
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-cta inline-flex items-center gap-2 transition-colors duration-300 btn-accent"
-                    >
-                      <Github size={16} />
-                      GitHub
-                    </a>
+              Portfolio
+            </span>
+
+            <h2
+              ref={headingRef}
+              className="font-heading mb-16"
+              style={{ fontSize: 'clamp(32px, 5vw, 56px)', letterSpacing: '-2px', color: 'hsl(var(--foreground))' }}
+            >
+              {headingWords.map((word, i) => (
+                <span key={i} className="word inline-block mr-[0.3em]">
+                  {word}
+                </span>
+              ))}
+            </h2>
+
+            <div className="flex flex-col gap-8">
+              {PROJECTS.map((project, i) => (
+                <div
+                  key={i}
+                  ref={el => { cardsRef.current[i] = el; }}
+                  className="card-project card-glass overflow-hidden will-change-transform"
+                >
+                  <div className={`card-inner grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 lg:p-10 ${i % 2 === 1 ? 'lg:direction-rtl' : ''}`}>
+                    <div className={`flex flex-col justify-center ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+                      <h3
+                        className="font-heading mb-4"
+                        style={{ fontSize: 'clamp(24px, 3vw, 32px)', letterSpacing: '-1px', color: 'hsl(var(--foreground))' }}
+                      >
+                        {project.name}
+                      </h3>
+                      <p
+                        className="text-base mb-4"
+                        style={{ color: 'hsl(var(--muted-foreground))', lineHeight: 1.65 }}
+                      >
+                        {project.description}
+                      </p>
+                      <p className="font-mono text-sm mb-6" style={{ color: 'hsl(var(--muted-foreground) / 0.6)' }}>
+                        {project.tech}
+                      </p>
+                      <div className="flex items-center gap-6">
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-cta inline-flex items-center gap-2 transition-colors duration-300 btn-accent"
+                        >
+                          <ExternalLink size={16} />
+                          Live Demo
+                        </a>
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-cta inline-flex items-center gap-2 transition-colors duration-300 btn-accent"
+                        >
+                          <Github size={16} />
+                          GitHub
+                        </a>
+                        <button
+                          onClick={() => setSelectedIndex(i)}
+                          className="font-cta inline-flex items-center gap-2 transition-colors duration-300 btn-accent"
+                        >
+                          Details <ArrowRight size={16} />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className={`flex items-center ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
+                      {project.image ? (
+                        <picture>
+                          <source srcSet={project.imageWebp} type="image/webp" />
+                          <source srcSet={project.image} type={project.image.endsWith('.png') ? 'image/png' : 'image/jpeg'} />
+                          <img
+                            src={project.image}
+                            alt={project.alt}
+                            className="w-full h-auto rounded-2xl object-cover"
+                            style={{ aspectRatio: '16/9' }}
+                            loading="lazy"
+                          />
+                        </picture>
+                      ) : (
+                        <div
+                          className="w-full rounded-2xl flex items-center justify-center"
+                          style={{
+                            aspectRatio: '16/9',
+                            background: 'linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--accent-2) / 0.2))',
+                          }}
+                        >
+                          <span className="font-heading text-3xl opacity-40" style={{ color: 'hsl(var(--foreground))' }}>
+                            {project.name.split(' ').map(w => w[0]).join('')}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-
-                <div className={`flex items-center ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
-                  {project.image ? (
-                    <picture>
-                      <source srcSet={project.imageWebp} type="image/webp" />
-                      <source srcSet={project.image} type="image/jpeg" />
-                      <img
-                        src={project.image}
-                        alt={project.alt}
-                        className="w-full h-auto rounded-2xl object-cover"
-                        style={{ aspectRatio: '16/9' }}
-                        loading="lazy"
-                      />
-                    </picture>
-                  ) : (
-                    <div
-                      className="w-full rounded-2xl flex items-center justify-center"
-                      style={{
-                        aspectRatio: '16/9',
-                        background: 'linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--accent-2) / 0.2))',
-                      }}
-                    >
-                      <span className="font-heading text-3xl opacity-40" style={{ color: 'hsl(var(--foreground))' }}>
-                        {project.name.split(' ').map(w => w[0]).join('')}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
       </div>
     </section>
   );
