@@ -1,11 +1,13 @@
 import { ArrowLeft, Calendar } from "lucide-react";
 
 interface Article {
+  id: string;
   title: string;
   excerpt: string;
   content: string;
   date: string;
   readTime: string;
+  tags: string[];
 }
 
 export default function BlogDetail({
@@ -17,6 +19,22 @@ export default function BlogDetail({
 }) {
   return (
     <article className="max-w-3xl mx-auto">
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": article.title,
+          "description": article.excerpt,
+          "datePublished": article.date,
+          "author": {
+            "@type": "Person",
+            "name": "Punit Mistry",
+            "url": "https://punit-mistry.netlify.app"
+          },
+          "url": `https://punit-mistry.netlify.app/articles/${article.id}`,
+          "keywords": article.tags.join(", ")
+        })}
+      </script>
       <button
         onClick={onBack}
         className="font-cta inline-flex items-center gap-2 mb-10 transition-colors duration-300 btn-accent"

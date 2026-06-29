@@ -15,6 +15,7 @@ import FAQ from '@/sections/FAQ';
 import Contact from '@/sections/Contact';
 import Footer from '@/sections/Footer';
 import SVGScrollPath from '@/components/SVGScrollPath';
+import ScrollToTop from '@/components/ScrollToTop';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -88,6 +89,8 @@ export default function App() {
         <Contact />
         <Footer onNavigate={handleNavigate} />
       </main>
+
+      <ScrollToTop />
     </div>
   );
 }

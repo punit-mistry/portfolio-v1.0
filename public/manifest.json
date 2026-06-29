@@ -1,0 +1,17 @@
+{
+  "name": "Punit Mistry — Full Stack Developer",
+  "short_name": "Punit Mistry",
+  "description": "Portfolio of Punit Mistry, a Full Stack Developer building modern, performant web applications.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#a78bfa",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
