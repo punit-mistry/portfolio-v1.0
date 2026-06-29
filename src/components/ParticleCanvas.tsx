@@ -31,23 +31,30 @@ const LAYER_COUNT_LOW = 2;
 const PARTICLE_BASE_SIZE = 1.2;
 const POINT_COUNT_HIGH = 10000;
 const POINT_COUNT_LOW = 2500;
+const POINT_COUNT_MOBILE = 500;
+const POINT_COUNT_IOS = 200;
 const MOUSE_RADIUS = 120;
+const MOUSE_RADIUS_MOBILE = 60;
 const MOUSE_STRENGTH = 0.3;
 const COLORS = ['rgba(255,255,255,', 'rgba(197,184,165,'];
 const TARGET_FPS = 30;
+const TARGET_FPS_MOBILE = 15;
 
 export default function ParticleCanvas() {
-  const { isLowEnd, prefersReducedMotion } = useLowEndDevice();
+  const { isLowEnd, isMobile, isiOS, prefersReducedMotion } = useLowEndDevice();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000, active: false });
   const burstParticlesRef = useRef<BurstParticle[]>([]);
   const animFrameRef = useRef<number>(0);
   const particlesRef = useRef<Particle[]>([]);
   const lastFrameTimeRef = useRef<number>(0);
-  const frameInterval = 1000 / TARGET_FPS;
 
   const initParticles = useCallback((width: number, height: number) => {
-    const count = prefersReducedMotion ? 0 : isLowEnd ? POINT_COUNT_LOW : POINT_COUNT_HIGH;
+    let count = POINT_COUNT_HIGH;
+    if (prefersReducedMotion) count = 0;
+    else if (isiOS) count = POINT_COUNT_IOS;
+    else if (isMobile) count = POINT_COUNT_MOBILE;
+    else if (isLowEnd) count = POINT_COUNT_LOW;
     const cols = Math.ceil(Math.sqrt(count * (width / height)));
     const rows = Math.ceil(count / cols);
     const xSpacing = width / cols;
@@ -82,8 +89,10 @@ export default function ParticleCanvas() {
 
     let grid = initParticles(window.innerWidth, window.innerHeight);
 
+    const frameInterval = 1000 / (isMobile || isiOS ? TARGET_FPS_MOBILE : TARGET_FPS);
+
     const resize = () => {
-      const dpr = isLowEnd || prefersReducedMotion ? 1 : Math.min(window.devicePixelRatio, 2);
+      const dpr = prefersReducedMotion ? 1 : (isMobile || isiOS) ? 1 : Math.min(window.devicePixelRatio, 2);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       ctx.scale(dpr, dpr);
@@ -102,7 +111,7 @@ export default function ParticleCanvas() {
 
     const handleClick = (e: MouseEvent) => {
       if (prefersReducedMotion) return;
-      const burstCount = isLowEnd ? 15 : 50;
+      const burstCount = isiOS ? 5 : isMobile ? 8 : isLowEnd ? 15 : 50;
       for (let i = 0; i < burstCount; i++) {
         const angle = (Math.PI * 2 * i) / burstCount + Math.random() * 0.3;
         const speed = 1 + Math.random() * 3;
@@ -170,9 +179,10 @@ export default function ParticleCanvas() {
           const dx = px - mouse.x;
           const dy = py - mouse.y;
           const distSq = dx * dx + dy * dy;
-          if (distSq < MOUSE_RADIUS * MOUSE_RADIUS && distSq > 0) {
+          const mouseRadius = isMobile || isiOS ? MOUSE_RADIUS_MOBILE : MOUSE_RADIUS;
+          if (distSq < mouseRadius * mouseRadius && distSq > 0) {
             const dist = Math.sqrt(distSq);
-            const force = (1 - dist / MOUSE_RADIUS) * MOUSE_STRENGTH;
+            const force = (1 - dist / mouseRadius) * MOUSE_STRENGTH;
             px -= (dx / dist) * force * 10;
             py -= (dy / dist) * force * 10;
           }

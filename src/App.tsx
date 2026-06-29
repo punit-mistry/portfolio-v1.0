@@ -21,13 +21,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   const lenisRef = useRef<Lenis | null>(null);
-  const { isLowEnd } = useLowEndDevice();
+  const { isLowEnd, isMobile } = useLowEndDevice();
 
   useEffect(() => {
     const lenis = new Lenis({
       duration: isLowEnd ? 0.8 : 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: !isLowEnd,
+      smoothWheel: !isMobile && !isLowEnd,
     });
 
     lenisRef.current = lenis;
@@ -62,17 +62,23 @@ export default function App() {
   return (
     <div className="relative min-h-screen" style={{ backgroundColor: 'hsl(var(--background))' }}>
       {/* Colorful gradient orbs for visual interest */}
-      <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none" style={{ background: 'radial-gradient(circle, hsl(var(--accent-2)) 0%, transparent 70%)' }} />
-      <div className="fixed top-[40%] right-[-15%] w-[400px] h-[400px] rounded-full opacity-10 pointer-events-none" style={{ background: 'radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)' }} />
-      <div className="fixed bottom-[-10%] left-[30%] w-[600px] h-[600px] rounded-full opacity-10 pointer-events-none" style={{ background: 'radial-gradient(circle, hsl(var(--accent-2)) 0%, transparent 70%)' }} />
+      {!isMobile && (
+        <>
+          <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none" style={{ background: 'radial-gradient(circle, hsl(var(--accent-2)) 0%, transparent 70%)' }} />
+          <div className="fixed top-[40%] right-[-15%] w-[400px] h-[400px] rounded-full opacity-10 pointer-events-none" style={{ background: 'radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)' }} />
+          <div className="fixed bottom-[-10%] left-[30%] w-[600px] h-[600px] rounded-full opacity-10 pointer-events-none" style={{ background: 'radial-gradient(circle, hsl(var(--accent-2)) 0%, transparent 70%)' }} />
+        </>
+      )}
 
       {/* SVG Scroll Tracking Path - spans full page */}
-      <div
-        className="absolute top-0 left-0 w-full pointer-events-none"
-        style={{ height: '100%', zIndex: 1 }}
-      >
-        <SVGScrollPath />
-      </div>
+      {!isMobile && (
+        <div
+          className="absolute top-0 left-0 w-full pointer-events-none"
+          style={{ height: '100%', zIndex: 1 }}
+        >
+          <SVGScrollPath />
+        </div>
+      )}
 
       {/* Navigation */}
       <Navigation onNavigate={handleNavigate} />

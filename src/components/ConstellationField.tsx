@@ -12,6 +12,7 @@ interface ConstellationParticle {
 
 const PARTICLE_COUNT_HIGH = 80;
 const PARTICLE_COUNT_LOW = 30;
+const PARTICLE_COUNT_MOBILE = 10;
 const CONNECTION_DIST = 100;
 const CONNECTION_DIST_SQ = CONNECTION_DIST * CONNECTION_DIST;
 const MOUSE_GRAVITY_RADIUS = 150;
@@ -19,7 +20,7 @@ const MOUSE_GRAVITY_STRENGTH = 0.02;
 const TARGET_FPS = 30;
 
 export default function ConstellationField() {
-  const { isLowEnd, prefersReducedMotion } = useLowEndDevice();
+  const { isLowEnd, isMobile, isiOS, prefersReducedMotion } = useLowEndDevice();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000, active: false });
   const animFrameRef = useRef<number>(0);
@@ -28,7 +29,11 @@ export default function ConstellationField() {
   const frameInterval = 1000 / TARGET_FPS;
 
   const initParticles = useCallback((width: number, height: number) => {
-    const count = prefersReducedMotion ? 0 : isLowEnd ? PARTICLE_COUNT_LOW : PARTICLE_COUNT_HIGH;
+    let count = PARTICLE_COUNT_HIGH;
+    if (prefersReducedMotion) count = 0;
+    else if (isiOS) count = 0;
+    else if (isMobile) count = PARTICLE_COUNT_MOBILE;
+    else if (isLowEnd) count = PARTICLE_COUNT_LOW;
     const particles: ConstellationParticle[] = [];
     for (let i = 0; i < count; i++) {
       particles.push({
