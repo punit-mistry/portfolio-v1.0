@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { label: 'About', target: '#about' },
   { label: 'Skills', target: '#skills' },
   { label: 'Work', target: '#work' },
+  { label: 'Articles', target: '#articles' },
   { label: 'Contact', target: '#contact' },
 ];
 
@@ -33,7 +34,7 @@ export default function Navigation({ onNavigate }: NavigationProps) {
   }, []);
 
   useEffect(() => {
-    const sections = ['about', 'skills', 'work', 'contact'];
+    const sections = ['about', 'skills', 'work', 'articles', 'contact'];
     const observers: IntersectionObserver[] = [];
 
     sections.forEach(id => {

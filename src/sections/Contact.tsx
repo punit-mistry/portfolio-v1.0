@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ConstellationField from "@/components/ConstellationField";
-import { Github, Linkedin, Instagram, MessageCircle } from "lucide-react";
+import { Github, Linkedin, Instagram, MessageCircle, Send } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -128,6 +128,83 @@ export default function Contact() {
               Message on WhatsApp
             </a>
           </div>
+        </div>
+
+        {/* Contact Form */}
+        <div
+          className="mb-10 w-full"
+          style={{ opacity: 0 }}
+        >
+          <form
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            action="/"
+            className="card-glass p-8 max-w-lg mx-auto text-left"
+          >
+            <input type="hidden" name="form-name" value="contact" />
+            <div className="mb-4">
+              <label className="font-mono text-xs mb-2 block" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                required
+                className="w-full px-4 py-3 rounded-xl font-mono text-sm"
+                style={{
+                  background: 'hsl(var(--background))',
+                  border: '1px solid hsl(var(--border))',
+                  color: 'hsl(var(--foreground))',
+                  outline: 'none',
+                }}
+                placeholder="Your name"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="font-mono text-xs mb-2 block" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                required
+                className="w-full px-4 py-3 rounded-xl font-mono text-sm"
+                style={{
+                  background: 'hsl(var(--background))',
+                  border: '1px solid hsl(var(--border))',
+                  color: 'hsl(var(--foreground))',
+                  outline: 'none',
+                }}
+                placeholder="your@email.com"
+              />
+            </div>
+            <div className="mb-5">
+              <label className="font-mono text-xs mb-2 block" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                Message
+              </label>
+              <textarea
+                name="message"
+                required
+                rows={4}
+                className="w-full px-4 py-3 rounded-xl font-mono text-sm resize-none"
+                style={{
+                  background: 'hsl(var(--background))',
+                  border: '1px solid hsl(var(--border))',
+                  color: 'hsl(var(--foreground))',
+                  outline: 'none',
+                }}
+                placeholder="Tell me about your project..."
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full font-cta px-6 py-3 rounded-xl transition-all duration-300 inline-flex items-center justify-center gap-2 btn-primary"
+            >
+              <Send size={16} />
+              Send Message
+            </button>
+          </form>
         </div>
 
         <div

@@ -11,6 +11,8 @@ const PROJECTS = [
     description: 'A comprehensive analytics dashboard featuring real-time data visualization, user management, and role-based access control.',
     tech: 'React · TypeScript · Tailwind · Recharts',
     image: '/project-dashboard.jpg',
+    imageWebp: '/project-dashboard.webp',
+    alt: 'Admin dashboard UI showing analytics charts, user management table, and real-time data visualization widgets',
     direction: -60,
   },
   {
@@ -18,6 +20,8 @@ const PROJECTS = [
     description: 'An intelligent WhatsApp bot built with Node.js that automates customer support, handles orders, and integrates with external APIs for seamless business communication.',
     tech: 'Node.js · Express · WhatsApp API · MongoDB',
     image: '/project-bot.jpg',
+    imageWebp: '/project-bot.webp',
+    alt: 'WhatsApp business bot interface showing automated customer chat, order management, and API integration dashboard',
     direction: 60,
   },
   {
@@ -25,6 +29,8 @@ const PROJECTS = [
     description: 'A visual tool for rapidly scaffolding Express.js applications with pre-configured middleware, database connections, and API endpoint generators.',
     tech: 'Node.js · Express · CLI · Inquirer.js',
     image: '/project-cli.jpg',
+    imageWebp: '/project-cli.webp',
+    alt: 'Express.js project builder CLI tool showing scaffolding options, middleware configuration, and API endpoint generator interface',
     direction: -60,
   },
 ];
@@ -161,13 +167,17 @@ export default function Work() {
                 </div>
 
                 <div className={`flex items-center ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
-                  <img
-                    src={project.image}
-                    alt={project.name}
-                    className="w-full h-auto rounded-2xl object-cover"
-                    style={{ aspectRatio: '16/9' }}
-                    loading="lazy"
-                  />
+                  <picture>
+                    <source srcSet={project.imageWebp} type="image/webp" />
+                    <source srcSet={project.image} type="image/jpeg" />
+                    <img
+                      src={project.image}
+                      alt={project.alt}
+                      className="w-full h-auto rounded-2xl object-cover"
+                      style={{ aspectRatio: '16/9' }}
+                      loading="lazy"
+                    />
+                  </picture>
                 </div>
               </div>
             </div>
