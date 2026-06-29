@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ConstellationField from "@/components/ConstellationField";
-import { Github, Linkedin, Instagram } from "lucide-react";
+import { Github, Linkedin, Instagram, MessageCircle } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -87,7 +87,7 @@ export default function Contact() {
 
         <a
           href="mailto:punitmistr@gmail.com"
-          className="inline-block font-heading mb-12 transition-all duration-300 email-link"
+          className="inline-block font-heading mb-6 transition-all duration-300 email-link"
           style={{
             opacity: 0,
             fontSize: "clamp(22px, 3vw, 32px)",
@@ -97,6 +97,38 @@ export default function Contact() {
         >
           punitmistr@gmail.com
         </a>
+
+        {/* WhatsApp CTA */}
+        <div
+          className="mb-10"
+          style={{ opacity: 0 }}
+        >
+          <div
+            className="card-glass p-8 max-w-lg mx-auto"
+          >
+            <p
+              className="font-heading text-xl mb-3"
+              style={{ color: "hsl(var(--foreground))", letterSpacing: "-0.5px" }}
+            >
+              Want to build a website or SaaS app?
+            </p>
+            <p
+              className="text-sm mb-5"
+              style={{ color: "hsl(var(--muted-foreground))", lineHeight: 1.6 }}
+            >
+              I'm available for freelance projects and collaborations. Whether you need a landing page, a full-stack web app, or a custom SaaS platform — let's discuss your idea over WhatsApp.
+            </p>
+            <a
+              href="https://wa.me/918286075880"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 px-6 py-3 rounded-xl font-cta transition-all duration-300 btn-whatsapp"
+            >
+              <MessageCircle size={20} />
+              Message on WhatsApp
+            </a>
+          </div>
+        </div>
 
         <div
           className="flex items-center justify-center gap-6"

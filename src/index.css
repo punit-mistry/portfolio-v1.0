@@ -215,4 +215,12 @@
     border-color: hsl(var(--accent-2) / 0.5);
     color: hsl(var(--accent-2));
   }
+
+  .btn-whatsapp {
+    background-color: #25D366;
+    color: #fff;
+  }
+  .btn-whatsapp:hover {
+    background-color: #20bd5a;
+  }
 }
